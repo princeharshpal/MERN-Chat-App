@@ -1,0 +1,75 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+@theme inline {
+  --color-primary: #8b5cf6;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #eab308;
+  --color-secondary-foreground: #000000;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ===== LIGHT MODE ===== */
+/* White + very light shades of grey */
+:root,
+.light {
+  --background: #ffffff;
+  --foreground: #111111;
+
+  --color-background: #ffffff;
+  --color-foreground: #111111;
+
+  --color-default-50: #fafafa;
+  --color-default-100: #f5f5f5;
+  --color-default-200: #e5e5e5;
+  --color-default-300: #d4d4d4;
+  --color-default-400: #a3a3a3;
+  --color-default-500: #737373;
+  --color-default-600: #525252;
+  --color-default-700: #404040;
+  --color-default-800: #262626;
+  --color-default-900: #171717;
+
+  --color-danger: #ef4444;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-accent: #8b5cf6;
+  --color-accent-foreground: #ffffff;
+}
+
+/* ===== DARK MODE ===== */
+/* Dark grey + black */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #f5f5f5;
+
+  --color-background: #0a0a0a;
+  --color-foreground: #f5f5f5;
+
+  --color-default-50: #0f0f0f;
+  --color-default-100: #171717;
+  --color-default-200: #262626;
+  --color-default-300: #404040;
+  --color-default-400: #525252;
+  --color-default-500: #737373;
+  --color-default-600: #a3a3a3;
+  --color-default-700: #d4d4d4;
+  --color-default-800: #e5e5e5;
+  --color-default-900: #f5f5f5;
+
+  --color-danger: #ef4444;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-accent: #a78bfa;
+  --color-accent-foreground: #000000;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
