@@ -12,10 +12,11 @@ const router = express.Router();
 
 router.use(protectRoute);
 
-router.post("/request", sendRequest);
-router.post("/respond", respondToRequest);
+router.route("/").get(getFriends).post(sendRequest);
+
+router.patch("/:id", respondToRequest);
+
 router.get("/possible", getPossibleConnections);
-router.get("/friends", getFriends);
 router.get("/pending", getPendingRequests);
 
 export default router;

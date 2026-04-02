@@ -9,16 +9,26 @@ export const getSocket = (): Socket | null => socket;
 export const connectSocket = (userId: string): Socket => {
   if (socket?.connected) return socket;
 
-  socket = io(SOCKET_URL, {
+  const finalUrl = SOCKET_URL || window.location.origin.replace(":3000", ":5000");
+  console.log("[Socket Debug] Attempting connection to:", finalUrl, "User:", userId);
+
+  socket = io(finalUrl, {
     query: { userId },
+    transports: ["websocket", "polling"],
+    reconnection: true,
   });
 
   socket.on("connect", () => {
-    console.log("[Socket] Connected:", socket?.id);
+    console.log("[Socket Debug] Connected! Socket ID:", socket?.id);
   });
 
-  socket.on("disconnect", () => {
-    console.log("[Socket] Disconnected");
+  socket.on("connect_error", (error) => {
+    console.error("[Socket Debug] Connection failed:", error.message);
+    console.error("[Socket Debug] Configured URL was:", SOCKET_URL);
+  });
+
+  socket.on("disconnect", (reason) => {
+    console.warn("[Socket Debug] Disconnected:", reason);
   });
 
   return socket;

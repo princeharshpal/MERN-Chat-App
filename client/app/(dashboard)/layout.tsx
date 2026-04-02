@@ -15,7 +15,7 @@ import { FiUsers, FiLogOut } from "react-icons/fi";
 import { useRouter, usePathname } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/src/store/hooks";
 import { setAuth, logoutSuccess } from "@/src/store/slices/authSlice";
-import { checkAuth, logout } from "@/src/services/auth.service";
+import { getMe, logout } from "@/src/services/auth.service";
 import { getAvatarUrl } from "@/src/utils/avatar";
 
 const SidebarItem = ({
@@ -55,7 +55,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const authenticate = async () => {
       try {
-        const data = await checkAuth();
+        const data = await getMe();
         dispatch(setAuth(data));
       } catch (error) {
         dispatch(setAuth(null));

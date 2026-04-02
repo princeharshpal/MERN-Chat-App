@@ -4,12 +4,14 @@ interface AuthState {
   user: any | null;
   isAuthenticated: boolean;
   isCheckingAuth: boolean;
+  onlineUsers: string[];
 }
 
 const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
   isCheckingAuth: true,
+  onlineUsers: [],
 };
 
 const authSlice = createSlice({
@@ -17,8 +19,9 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setAuth: (state, action: PayloadAction<any>) => {
-      state.user = action.payload;
-      state.isAuthenticated = !!action.payload;
+      const payload = action.payload?.data || action.payload;
+      state.user = payload;
+      state.isAuthenticated = !!payload;
       state.isCheckingAuth = false;
     },
     logoutSuccess: (state) => {
@@ -29,8 +32,12 @@ const authSlice = createSlice({
     setAuthLoading: (state, action: PayloadAction<boolean>) => {
       state.isCheckingAuth = action.payload;
     },
+    setOnlineUsers: (state, action: PayloadAction<string[]>) => {
+      state.onlineUsers = action.payload;
+    },
   },
 });
 
-export const { setAuth, logoutSuccess, setAuthLoading } = authSlice.actions;
+export const { setAuth, logoutSuccess, setAuthLoading, setOnlineUsers } =
+  authSlice.actions;
 export default authSlice.reducer;

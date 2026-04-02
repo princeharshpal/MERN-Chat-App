@@ -9,6 +9,8 @@ export const sendRequest = asyncHandler(async (req, res) => {
   const { recipientId } = req.body;
   const senderId = req.user._id;
 
+  if (!recipientId) throw new ApiError(400, "Recipient ID is required");
+
   if (senderId.toString() === recipientId) {
     throw new ApiError(400, "Cannot send request to yourself");
   }
@@ -44,34 +46,35 @@ export const sendRequest = asyncHandler(async (req, res) => {
 });
 
 export const respondToRequest = asyncHandler(async (req, res) => {
-  const { connectionId } = req.body;
-  const status = req.body.status?.trim()?.toLowerCase();
+  const { id } = req.params;
+  const { status } = req.body;
   const userId = req.user._id;
 
-  if (!["accepted", "rejected"].includes(status)) {
-    throw new ApiError(400, "Invalid status");
+  const normalizedStatus = status?.trim()?.toLowerCase();
+  if (!["accepted", "rejected"].includes(normalizedStatus)) {
+    throw new ApiError(400, "Invalid status. Must be 'accepted' or 'rejected'");
   }
 
-  const connection = await Connection.findById(connectionId);
+  const connection = await Connection.findById(id);
 
   if (!connection || connection.recipient.toString() !== userId.toString()) {
     throw new ApiError(404, "Request not found or unauthorized");
   }
 
-  connection.status = status;
+  connection.status = normalizedStatus;
   await connection.save();
 
   const requesterSocketId = getReceiverSocketId(connection.sender);
   if (requesterSocketId) {
     io.to(requesterSocketId).emit("friendRequestResponse", {
       recipient: req.user,
-      status,
+      status: normalizedStatus,
     });
   }
 
   return res
     .status(200)
-    .json(new ApiResponse(200, connection, `Request ${status}`));
+    .json(new ApiResponse(200, connection, `Request ${normalizedStatus}`));
 });
 
 export const getPossibleConnections = asyncHandler(async (req, res) => {

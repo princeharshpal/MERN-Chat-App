@@ -22,7 +22,7 @@ export default function Page() {
       const data = isLogin ? await login(formData) : await signup(formData);
 
       if (data.success) {
-        dispatch(setAuth(data));
+        dispatch(setAuth(data.data));
         router.push("/");
       } else {
         toast.error(data.message || "Authentication failed");

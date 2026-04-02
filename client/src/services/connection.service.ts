@@ -1,45 +1,29 @@
 import axiosInstance from "../lib/axios";
 
-const getFriends = async () => {
-  const response = await axiosInstance.get("/connections/friends");
+export const getFriends = async () => {
+  const response = await axiosInstance.get("/connections");
   return response.data;
 };
 
-const getRequests = async () => {
+export const getPendingRequests = async () => {
   const response = await axiosInstance.get("/connections/pending");
   return response.data;
 };
 
-const sendRequest = async (recipientId: string) => {
-  const response = await axiosInstance.post("/connections/request", {
-    recipientId,
-  });
+export const sendRequest = async (recipientId: string) => {
+  const response = await axiosInstance.post("/connections", { recipientId });
   return response.data;
 };
 
-const respondToRequest = async ({
-  connectionId,
-  status,
-}: {
-  connectionId: string;
-  status: string;
-}) => {
-  const response = await axiosInstance.post("/connections/respond", {
-    connectionId,
-    status,
-  });
+export const respondToRequest = async (
+  id: string,
+  status: "accepted" | "rejected",
+) => {
+  const response = await axiosInstance.patch(`/connections/${id}`, { status });
   return response.data;
 };
 
-const getPossibleConnections = async () => {
+export const getPossibleConnections = async () => {
   const response = await axiosInstance.get("/connections/possible");
   return response.data;
-};
-
-export {
-  getFriends,
-  getRequests,
-  sendRequest,
-  respondToRequest,
-  getPossibleConnections,
 };

@@ -4,7 +4,7 @@ import { generateTokens, generateAccessToken } from "../lib/utils.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import User from "../models/user.model.js"
+import User from "../models/user.model.js";
 
 export const signup = asyncHandler(async (req, res) => {
   const { fullName, email, password } = req.body;
@@ -161,4 +161,48 @@ export const getMe = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, req.user, "User profile fetched successfully"));
+});
+
+export const updateProfile = asyncHandler(async (req, res) => {
+  const { fullName, bio, profilePic } = req.body;
+  const userId = req.user._id;
+
+  const user = await User.findById(userId);
+  if (!user) throw new ApiError(404, "User not found");
+
+  user.fullName = fullName || user.fullName;
+  user.bio = bio || "";
+  user.profilePic = profilePic || "";
+
+  await user.save({ validateBeforeSave: false });
+
+  const updatedUser = await User.findById(userId).select(
+    "-password -refreshTokens",
+  );
+  return res
+    .status(200)
+    .json(new ApiResponse(200, updatedUser, "Profile updated fully"));
+});
+
+export const partialUpdateProfile = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+
+  const user = await User.findById(userId);
+  if (!user) throw new ApiError(404, "User not found");
+
+  const fields = Object.keys(req.body);
+  fields.forEach((field) => {
+    if (["fullName", "bio", "profilePic"].includes(field)) {
+      user[field] = req.body[field];
+    }
+  });
+
+  await user.save({ validateBeforeSave: false });
+
+  const updatedUser = await User.findById(userId).select(
+    "-password -refreshTokens",
+  );
+  return res
+    .status(200)
+    .json(new ApiResponse(200, updatedUser, "Profile updated partially"));
 });

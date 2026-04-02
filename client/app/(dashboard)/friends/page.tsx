@@ -320,7 +320,7 @@ const FriendsPage = () => {
                       <Button
                         size="sm"
                         variant="primary"
-                        className="text-white font-bold rounded-xl px-4 h-8 text-[9px] uppercase transition-transform active:scale-95 shadow-sm"
+                        className="text-black hover:bg-accent font-bold rounded-xl transition-transform active:scale-95 shadow-sm"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleAction("request", user._id);

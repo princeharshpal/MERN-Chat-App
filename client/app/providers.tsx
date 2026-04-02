@@ -7,6 +7,7 @@ import { store } from "@/src/store";
 import { Toaster } from "react-hot-toast";
 import { RouterProvider } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import { AuthInitializer } from "../src/components/AuthInitializer";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -21,7 +22,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           disableTransitionOnChange
         >
           <Toaster position="bottom-right" reverseOrder={false} />
-          {children}
+          <AuthInitializer>{children}</AuthInitializer>
         </NextThemesProvider>
       </Provider>
     </RouterProvider>

@@ -11,6 +11,7 @@ import authRoutes from "./src/routes/auth.route.js";
 import messageRoutes from "./src/routes/message.route.js";
 import connectionRoutes from "./src/routes/connection.route.js";
 import uploadRoutes from "./src/routes/upload.route.js";
+import groupRoutes from "./src/routes/group.route.js";
 import { app, server } from "./src/lib/socket.js";
 import { errorHandler } from "./src/middleware/error.middleware.js";
 
@@ -48,6 +49,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/connections", connectionRoutes);
+app.use("/api/groups", groupRoutes);
 
 app.use(errorHandler);
 
